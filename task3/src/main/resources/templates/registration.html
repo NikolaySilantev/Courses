@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Registration</title>
+</head>
+<body>
+<section class="h-100">
+    <div class="container h-100">
+        <div class="row justify-content-sm-center h-100">
+            <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                <div class="text-center my-5">
+                    <img src="https://getbootstrap.com/docs/5.0/assets/brand/bootstrap-logo.svg" alt="logo" width="100">
+                </div>
+                <div class="card shadow-lg mb-5">
+                    <div class="card-body p-5">
+                        <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+                        <form th:action="@{/registration}" method="post" modelAttribute="userForm"
+                              th:object="${userForm}">
+                            <div class="text-danger mb-2" th:text="${usernameError}"></div>
+                            <div class="text-danger mb-2" th:text="${passwordError}"></div>
+                            <div class="text-danger mb-2" th:if="${#fields.hasErrors('username')}"
+                                 th:errors="*{username}"></div>
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="name">Username</label>
+                                <input id="name" type="text" class="form-control" name="username" value="">
+                            </div>
+                            <div class="text-danger mb-2" th:if="${#fields.hasErrors('email')}"
+                                 th:errors="*{email}"></div>
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="email">E-Mail Address</label>
+                                <input id="email" type="email" class="form-control" name="email" value="">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="password">Password</label>
+                                <input id="password" type="password" class="form-control" name="password">
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="mb-2 text-muted" for="passwordConfirm">Confirm password</label>
+                                <input id="passwordConfirm" type="password" class="form-control" name="passwordConfirm">
+                            </div>
+
+                            <p class="form-text text-muted mb-3">
+                                By registering you agree with our terms and condition.
+                            </p>
+
+                            <div class="align-items-center d-flex ">
+                                <button type="submit" class="btn btn-primary">
+                                    Sign Up
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="card-footer py-3 border-0">
+                        <div class="text-center">
+                            Already have an account? <a href="/login" class="text-dark">Login</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>

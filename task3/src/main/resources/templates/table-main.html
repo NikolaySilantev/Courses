@@ -1,0 +1,75 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Table</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+<header class="py-3 mb-2 border-bottom">
+    <div class="container d-flex flex-wrap justify-content-between">
+        <a href="#" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32">
+                <use xlink:href="#bootstrap"></use>
+            </svg>
+            <span class="fs-4">Hello [[${#httpServletRequest.remoteUser}]]!</span>
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <form th:action="@{/logout}" method="post">
+                    <input type="submit" value="Sign out" class="btn btn-outline-primary">
+                </form>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="container">
+    <div class="table-responsive">
+        <form method="post" action="/table/edit">
+            <div class='row g-0 mt-1 mb-1' style="margin-right: .25rem !important;">
+                <div class="col-md-5 w-auto ms-auto" role="group" aria-label="Basic outlined example">
+                    <button type="submit" class="btn btn-outline" name="block">
+                        <i class="material-icons text-primary">lock_outline</i>
+                    </button>
+                    <button type="submit" class="btn btn-outline" name="unblock">
+                        <i class="material-icons text-primary">lock_open</i>
+                    </button>
+                    <button type="submit" class="btn btn-outline" name="delete">
+                        <i class="material-icons text-danger">remove_circle_outline</i>
+                    </button>
+                </div>
+            </div>
+            <table class="table table-responsive table-borderless" data-response-handler="responseHandler">
+                <thead>
+                <tr class="bg-light">
+                    <th scope="col"><input class="form-check-input" type="checkbox" id="selectAll"/></th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Unblocked</th>
+                    <th scope="col">Registration</th>
+                    <th scope="col">Last login</th>
+                </tr>
+                </thead>
+                <tbody th:each="el : ${users}">
+                <th scope="row"><input class="form-check-input" type="checkbox" th:value="${el.id}" name="ids"/></th>
+                <td th:text="${el.username}"></td>
+                <td th:text="${el.email}"></td>
+                <td th:text="${el.isAccountNonLocked()}"></td>
+                <td th:text="${#dates.format(el.registrationDate, 'dd.MM.yyyy HH:mm:ss')}"></td>
+                <td th:text="${#dates.format(el.lastLogin, 'dd.MM.yyyy HH:mm:ss')}"></td>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<script>
+    $('#selectAll').click(function (e) {
+        var table = $(e.target).closest('table');
+        $('input:checkbox', table).prop('checked', this.checked);
+    });
+</script>
+</body>
+</html>
