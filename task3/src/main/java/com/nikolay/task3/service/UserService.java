@@ -2,7 +2,6 @@ package com.nikolay.task3.service;
 
 import com.nikolay.task3.model.Role;
 import com.nikolay.task3.model.User;
-import com.nikolay.task3.repo.RoleRepository;
 import com.nikolay.task3.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,8 +21,7 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    RoleRepository roleRepository;
+
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -49,7 +47,7 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByUsername(user.getUsername()) != null || userRepository.findByEmail(user.getEmail()) != null) {
             return false;
         }
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(Role.ROLE_USER));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setRegistrationDate(new Timestamp(System.currentTimeMillis()));
         userRepository.save(user);
