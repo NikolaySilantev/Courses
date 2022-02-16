@@ -5,10 +5,6 @@ $(document).ready(function() {
     console.log("Index page is ready");
     connect();
 
-    $("#send").click(function() {
-        sendMessage();
-    });
-
     $("#send-private").click(function() {
         sendPrivateMessage();
     });
@@ -37,12 +33,25 @@ function connect() {
 }
 
 function showMessage(message) {
-    $("#messages").append("<tr>" +
-        "<td>" + message.sender + "</td>" +
-        "<td>" + message.subject + "</td>" +
-        "<td>" + message.full_text + "</td>" +
-        "</tr>");
-
+    $("#messages").prepend(
+        "<div class=\"card mb-2 p-3 shadow around\">\n" +
+        "                <div class=\"row mb-2\" data-bs-toggle=\"collapse\" href=\"#collapseExample" + message.id + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\">\n" +
+        "                    <div class=\"col\">" +
+        message.sender + "</div>\n" +
+        "                    <div class=\"col\">" +
+        message.subject + "</div>\n" +
+        "                    <div class=\"col\">" +
+        message.time + "</div>\n" +
+        "                    <div class=\"collapse mt-2\" id=\"collapseExample" + message.id + "\">\n" +
+        "                        <div class=\"fw-bolder\">\n" +
+        "                            Message text:\n" +
+        "                        </div>\n" +
+        "                        <div>" +
+        message.full_text + "</div>\n" +
+        "                    </div>\n" +
+        "                </div>\n" +
+        "            </div>"
+    );
 }
 
 function sendPrivateMessage() {

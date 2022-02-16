@@ -1,6 +1,7 @@
 package com.nikolay.task4.model;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "messages")
@@ -10,15 +11,18 @@ public class Message {
     private Long id;
 
     private String sender, receiver, subject,  full_text;
+    private Timestamp time;
 
     public Message() {
     }
 
-    public Message(String sender, String receiver, String subject, String full_text) {
+    public Message(Long id, String sender, String receiver, String subject, String full_text, Timestamp time) {
+        this.id = id;
         this.sender = sender;
         this.receiver = receiver;
         this.subject = subject;
         this.full_text = full_text;
+        this.time = time;
     }
 
     public Long getId() {
@@ -60,33 +64,12 @@ public class Message {
     public void setFull_text(String full_text) {
         this.full_text = full_text;
     }
-}
 
-//public class Message {
-//    private String full_text;
-//    private String receiver;
-//
-//    public Message() {
-//    }
-//
-//    public Message(String full_text, String receiver) {
-//        this.full_text = full_text;
-//        this.receiver = receiver;
-//    }
-//
-//    public String getReceiver() {
-//        return receiver;
-//    }
-//
-//    public void setReceiver(String receiver) {
-//        this.receiver = receiver;
-//    }
-//
-//    public String getFull_text() {
-//        return full_text;
-//    }
-//
-//    public void setFull_text(String full_text) {
-//        this.full_text = full_text;
-//    }
-//}
+    public Timestamp getTime() {
+        return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+}
