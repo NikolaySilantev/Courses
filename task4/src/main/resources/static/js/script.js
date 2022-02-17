@@ -7,11 +7,15 @@ $(document).ready(function() {
 
     $("#send-private").click(function() {
         sendPrivateMessage();
+        document.getElementById("receiver").value="";
+        document.getElementById("subject").value="";
+        document.getElementById("message").value="";
     });
 
     $("#notifications").click(function() {
         resetNotificationCount();
     });
+
 });
 
 function connect() {
@@ -19,17 +23,28 @@ function connect() {
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
         console.log('Connected: ' + frame);
-        updateNotificationDisplay();
 
         stompClient.subscribe('/user/topic/private-messages', function (message) {
             showMessage(JSON.parse(message.body));
-        });
-
-        stompClient.subscribe('/user/topic/private-notifications', function (message) {
-            notificationCount = notificationCount + 1;
-            updateNotificationDisplay();
+            createToast(message);
         });
     });
+}
+
+function createToast (message) {
+    $("#toasts").prepend(
+        "<div class=\"toast fade show\" role=\"alert\" aria-live=\"assertive\" aria-atomic=\"true\">\n" +
+        "        <div class=\"toast-header\">\n" +
+        "            <strong class=\"me-auto\">task4 project</strong>\n" +
+        "            <small class=\"text-muted\">" + timeFormat(new Date) + "</small>\n" +
+        "            <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"toast\" aria-label=\"Close\"></button>\n" +
+        "        </div>\n" +
+        "        <div class=\"toast-body\">\n" +
+        "            New message from: \n" + JSON.parse(message.body).sender +
+        "        </div>\n" +
+        "    </div>"
+    );
+    setTimeout(function (){$("#toasts").children().first().remove()}, 5000);
 }
 
 function timeFormat(time) {
@@ -39,7 +54,7 @@ function timeFormat(time) {
 
 function showMessage(message) {
     $("#messages").prepend(
-        "<div class=\"card mb-2 p-3 shadow around\">\n" +
+        "<div class=\"card mb-2 p-3 shadow around new-message border border-primary\">\n" +
         "                <div class=\"row mb-2\" data-bs-toggle=\"collapse\" href=\"#collapseExample" + message.id + "\" role=\"button\" aria-expanded=\"false\" aria-controls=\"collapseExample\">\n" +
         "                    <div class=\"col\">" +
         message.sender + "</div>\n" +
@@ -57,23 +72,12 @@ function showMessage(message) {
         "                </div>\n" +
         "            </div>"
     );
+    $(".new-message").click(function () {
+        $(this).removeClass('new-message border border-primary');
+    });
 }
 
 function sendPrivateMessage() {
     console.log("sending private message");
     stompClient.send("/ws/private-message", {}, JSON.stringify({'receiver': $("#receiver").val(), 'subject': $("#subject").val(), 'full_text': $("#message").val()}));
-}
-
-function updateNotificationDisplay() {
-    if (notificationCount == 0) {
-        $('#notifications').hide();
-    } else {
-        $('#notifications').show();
-        $('#notifications').text(notificationCount);
-    }
-}
-
-function resetNotificationCount() {
-    notificationCount = 0;
-    updateNotificationDisplay();
 }

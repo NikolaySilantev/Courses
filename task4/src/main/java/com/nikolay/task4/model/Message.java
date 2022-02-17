@@ -1,5 +1,7 @@
 package com.nikolay.task4.model;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -10,7 +12,10 @@ public class Message {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String sender, receiver, subject,  full_text;
+    private String sender, receiver, subject;
+
+    @Type(type="text")
+    private String full_text;
     private Timestamp time;
 
     public Message() {

@@ -1,8 +1,9 @@
 package com.nikolay.task4.controller;
 
 import com.nikolay.task4.model.Message;
+import com.nikolay.task4.model.User;
 import com.nikolay.task4.repo.MessageRepository;
-import com.nikolay.task4.service.NotificationService;
+import com.nikolay.task4.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -23,12 +24,14 @@ public class MessageController {
     MessageRepository messageRepository;
 
     @Autowired
-    private NotificationService notificationService;
+    UserService userService;
 
     @GetMapping("/message")
     public String showTable(Model model, HttpServletRequest httpServletRequest) {
         Iterable<Message> messages = messageRepository.findAllByUsername(httpServletRequest.getRemoteUser());
+        Iterable<User> users = userService.allUsers();
         model.addAttribute("messages", messages);
+        model.addAttribute("users", users);
         return "message-main";
     }
 
@@ -37,7 +40,6 @@ public class MessageController {
         message.setSender(principal.getName());
         message.setTime(new Timestamp(System.currentTimeMillis()));
         messageRepository.save(message);
-        notificationService.sendPrivateNotification(message.getReceiver());
         messagingTemplate.convertAndSendToUser(message.getReceiver(), "/topic/private-messages", message);
     }
 
