@@ -32,6 +32,11 @@ function connect() {
     });
 }
 
+function timeFormat(time) {
+    let date = new Date(time);
+    return  date.getDate().toString().padStart(2,'0') + "." + (date.getMonth()+1).toString().padStart(2,'0') + "." + date.getFullYear() + " " + date.getHours().toString().padStart(2, '0') + ":" + date.getMinutes().toString().padStart(2,'0')+ ":" + date.getSeconds().toString().padStart(2, '0');
+}
+
 function showMessage(message) {
     $("#messages").prepend(
         "<div class=\"card mb-2 p-3 shadow around\">\n" +
@@ -41,7 +46,7 @@ function showMessage(message) {
         "                    <div class=\"col\">" +
         message.subject + "</div>\n" +
         "                    <div class=\"col\">" +
-        message.time + "</div>\n" +
+        timeFormat(message.time) + "</div>\n" +
         "                    <div class=\"collapse mt-2\" id=\"collapseExample" + message.id + "\">\n" +
         "                        <div class=\"fw-bolder\">\n" +
         "                            Message text:\n" +
