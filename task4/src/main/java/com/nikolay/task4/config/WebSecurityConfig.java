@@ -28,26 +28,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf()
-                    .disable()
+                .disable()
                 .authorizeRequests()
-                    .antMatchers("/", "/registration").not().fullyAuthenticated()
-                    .antMatchers("/hello", "/message").hasRole("USER")
-                    .antMatchers("/", "/resources/**").permitAll()
+                .antMatchers("/", "/registration").not().fullyAuthenticated()
+                .antMatchers("/hello", "/message").hasRole("USER")
+                .antMatchers("/", "/resources/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                    .exceptionHandling().accessDeniedPage("/login")
+                .exceptionHandling().accessDeniedPage("/login")
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/message", true)
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/message", true)
+                .permitAll()
                 .and()
-                    .logout()
-                    .logoutSuccessUrl("/login")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
-                    .permitAll()
-                    .logoutSuccessUrl("/");
+                .logout()
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+                .logoutSuccessUrl("/");
     }
 
     @Autowired

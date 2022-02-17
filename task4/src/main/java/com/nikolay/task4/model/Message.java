@@ -14,7 +14,7 @@ public class Message {
 
     private String sender, receiver, subject;
 
-    @Type(type="text")
+    @Type(type = "text")
     private String full_text;
     private Timestamp time;
 
